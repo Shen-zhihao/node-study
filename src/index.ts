@@ -9,8 +9,11 @@
 // `node:` 前缀表示这是 Node 内置模块（不是从 node_modules 装的），推荐显式写出。
 import http from 'node:http';
 
-// 端口号：优先读环境变量，读不到就用 3000（这是后端最常见的写法）。
-const PORT = Number(process.env.PORT) || 3000;
+// 从统一的配置入口拿端口，而不是直接读 process.env。
+// 注意：这里的 env.PORT 已经是 number 类型了，有类型提示。
+import { env } from './config/env.js';
+
+const PORT = env.PORT;
 
 // createServer 接收一个回调，每来一个请求就执行一次。
 // req = 请求对象（谁来的、要什么），res = 响应对象（我们往里写东西返回给对方）。
