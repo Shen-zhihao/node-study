@@ -1,0 +1,26 @@
+// Prisma schema：用一种声明式语言描述「数据库里有哪些表、每张表长什么样」。
+// 它是「唯一事实来源」——改这里 → 生成迁移改数据库 → 生成带类型的查询客户端。
+// 文档：https://pris.ly/d/prisma-schema
+
+// generator：定义要生成什么。Prisma 7 把类型安全的客户端生成到 src 下（不再是 node_modules）。
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+// datasource：用哪种数据库。具体连接串在 prisma.config.ts 里从 DATABASE_URL 读取。
+datasource db {
+  provider = "postgresql"
+}
+
+// 我们的第一个模型：User。一个 model 对应数据库里的一张表。
+model User {
+  id        Int      @id @default(autoincrement()) // 主键，自增
+  email     String   @unique // 唯一约束：邮箱不可重复
+  name      String? // 问号 = 可选（可为 null）
+  createdAt DateTime @default(now()) // 插入时自动填当前时间
+  updatedAt DateTime @updatedAt // 每次更新自动刷新
+
+  // 把表名映射为 snake_case 复数（数据库惯例），字段名在 TS 里仍是驼峰。
+  @@map("users")
+}

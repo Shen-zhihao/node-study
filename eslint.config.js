@@ -7,7 +7,7 @@ import prettier from 'eslint-config-prettier';
 export default tseslint.config(
   // 1) 忽略的目录（等价于 .eslintignore）
   {
-    ignores: ['dist/**', 'node_modules/**'],
+    ignores: ['dist/**', 'node_modules/**', 'src/generated/**'],
   },
 
   // 2) JS 官方推荐规则
