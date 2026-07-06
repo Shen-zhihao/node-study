@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    /* 编译目标：Node 20 完整支持 ES2022 语法 */
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2022"],
+    "types": ["node"],
+
+    /* 输出：把 src 里的 .ts 编译到 dist 里的 .js */
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    /* 类型安全：企业级项目一定要全部打开 */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+
+    /* 模块互操作 & 体验 */
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+
+    /* 生成 sourcemap，方便调试时定位到 .ts 源码 */
+    "sourceMap": true,
+    "declaration": false
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
