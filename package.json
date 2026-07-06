@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "企业级 Node.js 后端学习项目（Express + TypeScript + Prisma + PostgreSQL）",
   "type": "module",
-  "main": "dist/index.js",
+  "main": "dist/server.js",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
+    "dev": "tsx watch src/server.ts",
     "build": "tsc",
-    "start": "node dist/index.js",
+    "start": "node dist/server.js",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -20,6 +20,7 @@
   "license": "ISC",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@types/express": "^5.0.6",
     "@types/node": "^26.1.0",
     "eslint": "^10.6.0",
     "eslint-config-prettier": "^10.1.8",
@@ -31,6 +32,7 @@
   },
   "dependencies": {
     "dotenv": "^17.4.2",
+    "express": "^5.2.1",
     "zod": "^4.4.3"
   }
 }
