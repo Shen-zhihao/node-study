@@ -22,6 +22,10 @@ const envSchema = z.object({
   // 端口：环境变量都是字符串，z.coerce.number() 会自动转成数字。
   // .default(3000) 表示没配时用 3000。
   PORT: z.coerce.number().int().positive().default(3000),
+
+  // 数据库连接串。这是 Step 5 的 Prisma 要用的核心配置，缺了服务就没意义，
+  // 所以不给默认值——没配就直接 fail fast。
+  DATABASE_URL: z.string().min(1, 'DATABASE_URL 不能为空'),
 });
 
 // 校验。safeParse 不会抛异常，而是返回 { success, data | error }，方便我们自定义报错。
