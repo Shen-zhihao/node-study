@@ -5,10 +5,12 @@
 
 import { Router } from 'express';
 import { healthRouter } from './health.routes.js';
+import { userRouter } from './user.routes.js';
 
 export const apiRouter = Router();
 
 // GET /api/health → healthRouter
 apiRouter.use('/health', healthRouter);
 
-// 未来：apiRouter.use('/users', userRouter);
+// /api/users/* → userRouter
+apiRouter.use('/users', userRouter);

@@ -45,8 +45,8 @@ curl http://localhost:3000/api/health
 
 - [x] **Step 4** Docker Compose 起 PostgreSQL
 - [x] **Step 5** 接入 Prisma（schema / migration / client 单例）
-- [ ] **Step 6** 实现完整 User CRUD，走通「路由→控制器→服务→数据库」全链路 ← 下一步
-- [ ] **Step 7** 请求校验 + 统一响应格式 + 全局错误处理
+- [x] **Step 6** 实现完整 User CRUD，走通「路由→控制器→服务→数据库」全链路
+- [ ] **Step 7** 请求校验 + 统一响应格式 + 全局错误处理 ← 下一步
 
 **阶段三 · 企业级特性**
 
