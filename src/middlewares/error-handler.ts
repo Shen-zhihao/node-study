@@ -17,6 +17,7 @@ import { AppError } from '../lib/errors.js';
 import { Prisma } from '../generated/prisma/client.js';
 import type { ErrorBody } from '../lib/api-response.js';
 import { isProd } from '../config/env.js';
+import { logger } from '../lib/logger.js';
 
 // 注意：即使不用 next，错误处理中间件也【必须】保留第 4 个参数，否则 Express 不认它。
 export function errorHandler(err: unknown, req: Request, res: Response, _next: NextFunction): void {
@@ -49,8 +50,9 @@ export function errorHandler(err: unknown, req: Request, res: Response, _next: N
   }
 
   // 5xx 属于「意料之外」，需要打日志方便排查；4xx 是客户端问题，不必刷屏。
+  // logger 会自动带上当前请求的 requestId（见 logger.ts 的 mixin），日志能直接对应到具体请求。
   if (statusCode >= 500) {
-    console.error(`[error] ${req.method} ${req.originalUrl}`, err);
+    logger.error({ err, method: req.method, url: req.originalUrl }, '请求处理出错');
   }
 
   const body: ErrorBody = {

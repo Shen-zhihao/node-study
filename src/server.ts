@@ -5,10 +5,11 @@
 
 import { env } from './config/env.js';
 import { createApp } from './app.js';
+import { logger } from './lib/logger.js';
 
 const app = createApp();
 
 app.listen(env.PORT, () => {
-  console.log(`🚀 服务已启动：http://localhost:${env.PORT}`);
-  console.log(`   健康检查：http://localhost:${env.PORT}/api/health`);
+  logger.info(`🚀 服务已启动：http://localhost:${env.PORT}`);
+  logger.info(`   健康检查：http://localhost:${env.PORT}/api/health`);
 });

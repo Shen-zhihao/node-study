@@ -26,6 +26,12 @@ const envSchema = z.object({
   // 数据库连接串。这是 Step 5 的 Prisma 要用的核心配置，缺了服务就没意义，
   // 所以不给默认值——没配就直接 fail fast。
   DATABASE_URL: z.string().min(1, 'DATABASE_URL 不能为空'),
+
+  // 日志级别（Step 8）。pino 的级别从低到高：trace < debug < info < warn < error < fatal。
+  // 设为某级别后，只输出「≥ 该级别」的日志。开发想看 SQL/调试细节可设 debug。
+  LOG_LEVEL: z
+    .enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent'])
+    .default('info'),
 });
 
 // 校验。safeParse 不会抛异常，而是返回 { success, data | error }，方便我们自定义报错。

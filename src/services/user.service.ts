@@ -8,6 +8,7 @@
  */
 
 import { prisma } from '../lib/prisma.js';
+import { logger } from '../lib/logger.js';
 
 // 创建用户需要的输入：email 必填，name 可选（对应 schema 里的 String?）。
 export interface CreateUserInput {
@@ -35,6 +36,9 @@ export function getUserById(id: number) {
 // 新建用户。email 有唯一约束，重复插入 Prisma 抛 P2002 →
 // 全局错误处理中间件会把它翻译成 409 Conflict（见 error-handler.ts）。
 export function createUser(input: CreateUserInput) {
+  // service 层打的日志同样会自动带上 requestId（靠 logger 的 mixin + 请求上下文），
+  // 和「请求完成」那条日志用的是同一个 id —— 这就是链路追踪：一个 id 串起一次请求的所有日志。
+  logger.info({ email: input.email }, '创建用户');
   return prisma.user.create({ data: input });
 }
 

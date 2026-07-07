@@ -50,8 +50,8 @@ curl http://localhost:3000/api/health
 
 **阶段三 · 企业级特性**
 
-- [ ] **Step 8** 结构化日志（pino）+ 请求链路追踪 ← 下一步
-- [ ] **Step 9** 认证鉴权（JWT + 密码加密）
+- [x] **Step 8** 结构化日志（pino）+ 请求链路追踪
+- [ ] **Step 9** 认证鉴权（JWT + 密码加密） ← 下一步
 - [ ] **Step 10** 分环境配置 / 健康检查 / 优雅关闭
 - [ ] **Step 11** 单元测试 + 接口测试（Vitest + supertest）
 - [ ] **Step 12** API 文档（Swagger / OpenAPI）
