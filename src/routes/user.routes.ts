@@ -1,9 +1,8 @@
 /**
  * User 路由：定义 users 资源的 5 个 RESTful 端点，映射到对应控制器函数。
- * 路由只做「路径 + 方法 → 控制器」的映射，不写任何逻辑。
  *
- * 这里的路径都是相对的，挂载时会加上前缀（见 routes/index.ts），
- * 最终对外是 /api/users。
+ * 注意「写操作」多了一层 validate 中间件：请求会先经过校验，通过了才进控制器。
+ * 中间件按书写顺序执行：validate(...) → 控制器。
  */
 
 import { Router } from 'express';
@@ -14,11 +13,13 @@ import {
   patchUser,
   removeUser,
 } from '../controllers/user.controller.js';
+import { validate } from '../middlewares/validate.js';
+import { createUserSchema, updateUserSchema } from '../schemas/user.schema.js';
 
 export const userRouter = Router();
 
-userRouter.get('/', getUsers); // GET    /api/users      列表
-userRouter.post('/', postUser); // POST   /api/users      新建
-userRouter.get('/:id', getUser); // GET    /api/users/:id  查单个
-userRouter.patch('/:id', patchUser); // PATCH  /api/users/:id  更新
-userRouter.delete('/:id', removeUser); // DELETE /api/users/:id  删除
+userRouter.get('/', getUsers); //                              GET    /api/users
+userRouter.post('/', validate(createUserSchema), postUser); // POST   /api/users
+userRouter.get('/:id', getUser); //                            GET    /api/users/:id
+userRouter.patch('/:id', validate(updateUserSchema), patchUser); // PATCH  /api/users/:id
+userRouter.delete('/:id', removeUser); //                      DELETE /api/users/:id

@@ -32,13 +32,13 @@ export function getUserById(id: number) {
   return prisma.user.findUnique({ where: { id } });
 }
 
-// 新建用户。email 有唯一约束，重复插入会让 Prisma 抛错（P2002），
-// 这个错误的「优雅处理」留到 Step 7 的全局错误处理统一收口。
+// 新建用户。email 有唯一约束，重复插入 Prisma 抛 P2002 →
+// 全局错误处理中间件会把它翻译成 409 Conflict（见 error-handler.ts）。
 export function createUser(input: CreateUserInput) {
   return prisma.user.create({ data: input });
 }
 
-// 更新用户。id 不存在时 Prisma 会抛 P2025 错误，同样留到 Step 7 处理。
+// 更新用户。id 不存在时 Prisma 抛 P2025 → 全局处理器翻译成 404。
 export function updateUser(id: number, input: UpdateUserInput) {
   return prisma.user.update({ where: { id }, data: input });
 }

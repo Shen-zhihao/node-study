@@ -12,6 +12,7 @@ import express, { type Express } from 'express';
 import { apiRouter } from './routes/index.js';
 import { requestLogger } from './middlewares/request-logger.js';
 import { notFoundHandler } from './middlewares/not-found.js';
+import { errorHandler } from './middlewares/error-handler.js';
 
 export function createApp(): Express {
   const app = express();
@@ -23,10 +24,12 @@ export function createApp(): Express {
   // ② 业务路由，统一挂在 /api 前缀下
   app.use('/api', apiRouter);
 
-  // ③ 404 兜底：必须放在所有路由「之后」
+  // ③ 404 兜底：必须放在所有路由「之后」（它会抛 NotFoundError 交给下面的错误处理器）
   app.use(notFoundHandler);
 
-  // 注：全局错误处理中间件放在 Step 7 补上（它有特殊的 4 个参数签名）。
+  // ④ 全局错误处理：必须放在【最后】。它有特殊的 4 个参数签名 (err, req, res, next)，
+  //    Express 靠参数个数识别它，所有 throw / reject / next(err) 最终都汇聚到这里。
+  app.use(errorHandler);
 
   return app;
 }
