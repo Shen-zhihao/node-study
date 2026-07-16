@@ -8,13 +8,6 @@
  */
 
 import { prisma } from '../lib/prisma.js';
-import { logger } from '../lib/logger.js';
-
-// 创建用户需要的输入：email 必填，name 可选（对应 schema 里的 String?）。
-export interface CreateUserInput {
-  email: string;
-  name?: string;
-}
 
 // 更新用户的输入：两个字段都可选（只传想改的）。
 export interface UpdateUserInput {
@@ -22,29 +15,26 @@ export interface UpdateUserInput {
   name?: string;
 }
 
+// Step 9 起：User 多了 password（密码哈希）字段。所有「读用户」的查询都用 omit 把它排除，
+// 这样密码哈希绝不会顺着 /api/users 的响应流出去。
+// 说明：创建用户的职责已经交给「注册」接口（POST /api/auth/register，会加密密码），
+// users 资源不再自己建用户，避免出现「绕过密码加密」的第二条建用户路径。
+const OMIT_PASSWORD = { password: true } as const;
+
 // 列出全部用户。orderBy 让结果稳定（按 id 升序），否则顺序不保证。
 export function listUsers() {
-  return prisma.user.findMany({ orderBy: { id: 'asc' } });
+  return prisma.user.findMany({ orderBy: { id: 'asc' }, omit: OMIT_PASSWORD });
 }
 
 // 按 id 查单个用户。findUnique 查不到会返回 null（不是抛错），
 // 由控制器决定「查不到」怎么回应（这里我们回 404）。
 export function getUserById(id: number) {
-  return prisma.user.findUnique({ where: { id } });
-}
-
-// 新建用户。email 有唯一约束，重复插入 Prisma 抛 P2002 →
-// 全局错误处理中间件会把它翻译成 409 Conflict（见 error-handler.ts）。
-export function createUser(input: CreateUserInput) {
-  // service 层打的日志同样会自动带上 requestId（靠 logger 的 mixin + 请求上下文），
-  // 和「请求完成」那条日志用的是同一个 id —— 这就是链路追踪：一个 id 串起一次请求的所有日志。
-  logger.info({ email: input.email }, '创建用户');
-  return prisma.user.create({ data: input });
+  return prisma.user.findUnique({ where: { id }, omit: OMIT_PASSWORD });
 }
 
 // 更新用户。id 不存在时 Prisma 抛 P2025 → 全局处理器翻译成 404。
 export function updateUser(id: number, input: UpdateUserInput) {
-  return prisma.user.update({ where: { id }, data: input });
+  return prisma.user.update({ where: { id }, data: input, omit: OMIT_PASSWORD });
 }
 
 // 删除用户。id 不存在同样抛 P2025。

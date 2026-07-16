@@ -12,13 +12,12 @@ import type { Request, Response } from 'express';
 import {
   listUsers,
   getUserById,
-  createUser,
   updateUser,
   deleteUser,
 } from '../services/user.service.js';
 import { sendSuccess } from '../lib/api-response.js';
 import { NotFoundError, ValidationError } from '../lib/errors.js';
-import type { CreateUserBody, UpdateUserBody } from '../schemas/user.schema.js';
+import type { UpdateUserBody } from '../schemas/user.schema.js';
 
 // 把路径参数 :id 解析成正整数，非法就抛 400。抽成小函数供各处复用。
 // Express 5 里 req.params 的值类型是 string | string[]，所以这里收 unknown 更稳。
@@ -47,12 +46,8 @@ export async function getUser(req: Request, res: Response): Promise<void> {
   sendSuccess(res, user);
 }
 
-// POST /api/users —— 创建用户（body 已由 validate(createUserSchema) 校验）
-export async function postUser(req: Request, res: Response): Promise<void> {
-  const input = req.body as CreateUserBody;
-  const user = await createUser(input);
-  sendSuccess(res, user, 201);
-}
+// 注：创建用户的入口已移到「注册」接口（POST /api/auth/register），
+// users 资源只保留 读 / 改 / 删，不再重复实现建用户逻辑。
 
 // PATCH /api/users/:id —— 更新用户（body 已由 validate(updateUserSchema) 校验）
 export async function patchUser(req: Request, res: Response): Promise<void> {

@@ -1,8 +1,8 @@
 /**
  * 校验中间件工厂：传入一个 zod schema，返回一个「校验 req.body」的中间件。
  *
- * 用法（见 user.routes.ts）：
- *   userRouter.post('/', validate(createUserSchema), postUser);
+ * 用法（见 auth.routes.ts）：
+ *   authRouter.post('/register', validate(registerSchema), postRegister);
  *
  * 校验通过：用「解析后的干净数据」覆盖 req.body（会剥掉多余字段、完成类型转换），
  *          然后 next() 放行进入控制器。

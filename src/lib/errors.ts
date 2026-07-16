@@ -29,6 +29,15 @@ export class NotFoundError extends AppError {
   }
 }
 
+// 401：未认证。没带 token、token 过期/无效、或登录时账号密码不对，都归到这里。
+// 安全提醒：登录失败时别告诉调用方「到底是邮箱不存在还是密码错」，统一含糊回应，
+// 否则等于帮攻击者枚举哪些邮箱已注册。
+export class UnauthorizedError extends AppError {
+  constructor(message = '未认证或凭证无效') {
+    super(401, 'UNAUTHORIZED', message);
+  }
+}
+
 // 409：冲突，比如 email 已被占用。
 export class ConflictError extends AppError {
   constructor(message: string) {

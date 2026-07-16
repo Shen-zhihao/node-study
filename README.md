@@ -51,8 +51,8 @@ curl http://localhost:3000/api/health
 **阶段三 · 企业级特性**
 
 - [x] **Step 8** 结构化日志（pino）+ 请求链路追踪
-- [ ] **Step 9** 认证鉴权（JWT + 密码加密） ← 下一步
-- [ ] **Step 10** 分环境配置 / 健康检查 / 优雅关闭
+- [x] **Step 9** 认证鉴权（JWT + 密码加密 + 鉴权中间件）
+- [ ] **Step 10** 分环境配置 / 健康检查 / 优雅关闭 ← 下一步
 - [ ] **Step 11** 单元测试 + 接口测试（Vitest + supertest）
 - [ ] **Step 12** API 文档（Swagger / OpenAPI）
 
@@ -65,12 +65,13 @@ node-study/
 │   └── migrations/          # 版本化迁移历史
 ├── src/
 │   ├── config/env.ts        # 环境变量唯一入口（校验+类型）
-│   ├── lib/                 # 基础设施：prisma 单例 / 错误类 / 统一响应
+│   ├── lib/                 # 基础设施：prisma / 错误类 / 统一响应 / 日志 / 密码加密 / JWT
 │   ├── schemas/             # 请求体校验规则（zod）
-│   ├── routes/              # 路由：路径→控制器
+│   ├── routes/              # 路由：路径→控制器（health / auth / users）
 │   ├── controllers/         # 控制器：HTTP 翻译官
 │   ├── services/            # 服务：纯业务逻辑
-│   ├── middlewares/         # 中间件：日志 / 校验 / 404 / 全局错误处理
+│   ├── middlewares/         # 中间件：日志 / 校验 / 鉴权 / 404 / 全局错误处理
+│   ├── types/               # 类型增强（给 Express Request 补 user 字段）
 │   ├── generated/prisma/    # Prisma 生成物（gitignore）
 │   ├── app.ts               # 组装 Express 应用
 │   └── server.ts            # 启动入口

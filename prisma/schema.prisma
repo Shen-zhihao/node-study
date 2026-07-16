@@ -18,6 +18,7 @@ model User {
   id        Int      @id @default(autoincrement()) // 主键，自增
   email     String   @unique // 唯一约束：邮箱不可重复
   name      String? // 问号 = 可选（可为 null）
+  password  String // 密码「哈希值」（绝不存明文，Step 9 用 bcrypt 加密）
   createdAt DateTime @default(now()) // 插入时自动填当前时间
   updatedAt DateTime @updatedAt // 每次更新自动刷新
 

@@ -32,6 +32,14 @@ const envSchema = z.object({
   LOG_LEVEL: z
     .enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent'])
     .default('info'),
+
+  // JWT 签名密钥（Step 9）。服务端用它给 token 签名、也用它验签——
+  // 谁拿到这个密钥就能伪造任意用户的 token，所以它是核心机密：不给默认值（fail fast），
+  // 生产环境务必用足够长的随机串。这里要求至少 16 位，避免用 "123" 这种弱密钥。
+  JWT_SECRET: z.string().min(16, 'JWT_SECRET 至少 16 位，请用足够随机的长字符串'),
+
+  // token 有效期。支持 "15m" / "7d" / "24h" 这种人类可读格式（jsonwebtoken 的 expiresIn）。
+  JWT_EXPIRES_IN: z.string().default('7d'),
 });
 
 // 校验。safeParse 不会抛异常，而是返回 { success, data | error }，方便我们自定义报错。

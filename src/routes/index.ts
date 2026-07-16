@@ -6,11 +6,15 @@
 import { Router } from 'express';
 import { healthRouter } from './health.routes.js';
 import { userRouter } from './user.routes.js';
+import { authRouter } from './auth.routes.js';
 
 export const apiRouter = Router();
 
 // GET /api/health → healthRouter
 apiRouter.use('/health', healthRouter);
+
+// /api/auth/* → authRouter（注册 / 登录 / 当前用户）
+apiRouter.use('/auth', authRouter);
 
 // /api/users/* → userRouter
 apiRouter.use('/users', userRouter);

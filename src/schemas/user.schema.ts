@@ -8,11 +8,7 @@
 
 import { z } from 'zod';
 
-// 创建用户：email 必填且必须是合法邮箱；name 可选，给了就不能是空串。
-export const createUserSchema = z.object({
-  email: z.email('email 格式不正确'),
-  name: z.string().min(1, 'name 不能为空字符串').optional(),
-});
+// 注：创建用户的校验规则已移到 auth.schema.ts 的 registerSchema（注册时才建用户）。
 
 // 更新用户：两个字段都可选（PATCH 语义 = 只改传了的字段），
 // 但用 .refine 要求「至少传一个」，否则这次更新没有意义。
@@ -26,5 +22,4 @@ export const updateUserSchema = z
   });
 
 // 从 schema 反推出 TypeScript 类型，供 service/controller 复用，避免手写重复接口。
-export type CreateUserBody = z.infer<typeof createUserSchema>;
 export type UpdateUserBody = z.infer<typeof updateUserSchema>;
